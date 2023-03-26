@@ -8,7 +8,7 @@ const resolvers = {
   Query: {
     me: async (parent, args, context) => {
       if (context.user) {
-        // if user exists, return user data
+        // ❄️ if user exists, return user data
         const userData = await User.findOne({ _id: context.user._id }).select(
           "-__v -password"
         );
@@ -18,10 +18,9 @@ const resolvers = {
     },
   },
 
-  // mutation: login; addUser; saveBook; removeBook
+  // ❄️ mutation: login; addUser; saveBook; removeBook
   Mutation: {
     login: async (parent, { email, password }) => {
-      // check user email & password
       const user = await User.findOne({ email });
       if (!user) {
         throw new AuthenticationError("User not found");
@@ -41,14 +40,13 @@ const resolvers = {
       return { token, user };
     },
 
-    // type mutation in typeDefs.js: `saveBook(bookData: BookInput!): User`
+    // ❄️ type mutation in typeDefs.js: `saveBook(bookData: BookInput!): User`
     saveBook: async (parent, { bookData }, context) => {
       if (context.user) {
-        // ---- ⏰ TODO: Check `findOneAndUpdate` or `findByIdAndUpdate`? ⤵️ --------
-        const updatedUser = await User.findOneAndUpdate(
+        const updatedUser = await User.findByIdAndUpdate( // ⬅️ searches for a document by its _id field
           { _id: context.user._id },
-          // ---- ⏰ TODO: Check `$addToSet` or `$push`? ⤵️ --------
-          // $addToSet: Adds a value to an array unless the value is already present, in which case $addToSet does nothing to that array.
+          // ❄️ `$addToSet`: Adds elements to an array only if they do not already exist in the set.
+          // ❄️ https://www.mongodb.com/docs/manual/reference/operator/update-array/
           { $addToSet: { savedBooks: bookData } },
           { new: true }
         );
@@ -59,9 +57,9 @@ const resolvers = {
 
     removeBook: async (parent, { bookId }, context) => {
       if (context.user) {
-        // ---- ⏰ TODO: Check `findOneAndUpdate` or `findByIdAndUpdate`? ⤵️ --------
-        const updatedUser = await User.findOneAndUpdate(
+        const updatedUser = await User.findByIdAndUpdate(
           { _id: context.user._id },
+          // ❄️ `$pull`: Removes all array elements that match a specified query.
           { $pull: { savedBooks: { bookId } } },
           { new: true }
         );
