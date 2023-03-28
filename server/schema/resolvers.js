@@ -14,7 +14,7 @@ const resolvers = {
         );
         return userData;
       }
-      throw new AuthenticationError("Not logged in");
+      throw new AuthenticationError("Login failed");
     },
   },
 
@@ -23,7 +23,7 @@ const resolvers = {
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
       if (!user) {
-        throw new AuthenticationError("User not found");
+        throw new AuthenticationError("Login failed");
       }
       const correctPw = await user.isCorrectPassword(password);
       if (!correctPw) {
@@ -52,7 +52,7 @@ const resolvers = {
         );
         return updatedUser;
       }
-      throw new AuthenticationError("Not logged in");
+      throw new AuthenticationError("Login failed");
     },
 
     removeBook: async (parent, { bookId }, context) => {
@@ -65,7 +65,7 @@ const resolvers = {
         );
         return updatedUser;
       }
-      throw new AuthenticationError("Not logged in");
+      throw new AuthenticationError("Login failed");
     },
   },
 };
