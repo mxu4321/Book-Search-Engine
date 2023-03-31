@@ -3,7 +3,6 @@
 import { gql } from "@apollo/client";
 
 export const GET_ME = gql`
-# ----- ⏰TODO: check if 'query: me' is needed ------
   query me {
     me {
       _id

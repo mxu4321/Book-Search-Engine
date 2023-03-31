@@ -6,7 +6,8 @@ const { typeDefs, resolvers } = require("./schemas");
 const express = require("express");
 const path = require("path");
 const db = require("./config/connection");
-const routes = require("./routes");
+// ❄️ routes are no longer needed
+// const routes = require("./routes");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -17,7 +18,9 @@ const server = new ApolloServer({
   resolvers,
   context: authMiddleware,
 });
-server.applyMiddleware({ app });
+
+// ❄️ commented out below
+// server.applyMiddleware({ app });
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

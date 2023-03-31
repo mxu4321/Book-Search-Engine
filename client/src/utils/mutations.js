@@ -32,12 +32,10 @@ export const ADD_USER = gql`
 export const SAVE_BOOK = gql`
   mutation saveBook($bookData: bookInput!) {
     saveBook(bookData: $bookData) {
-      # ---- ⏰ TODO: Check if '_id' needed? ⤵️ --------
       _id
       username
       email
       savedBooks {
-        # ---- ⏰ TODO: Check if 'bookId' needed? ⤵️ --------
         bookId
         title
         authors
@@ -50,15 +48,13 @@ export const SAVE_BOOK = gql`
 `;
 
 export const REMOVE_BOOK = gql`
-  # ---- ⏰ TODO: Check bookId: 'string!'? ⤵️ --------
   mutation removeBook($bookId: ID!) {
     removeBook(bookId: $bookId) {
-      # ---- ⏰ TODO: Check if '_id' needed? ⤵️ --------
+
       _id
       username
       email
       savedBooks {
-        # ---- ⏰ TODO: Check if 'bookId' needed? ⤵️ --------
         bookId
         title
         authors
