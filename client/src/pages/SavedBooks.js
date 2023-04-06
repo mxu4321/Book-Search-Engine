@@ -14,7 +14,7 @@ import {
 // ❄️ import utils and hooks from Apollo instead of using API
 import { GET_ME } from '../utils/queries';
 import { REMOVE_BOOK } from '../utils/mutations';
-import { useQuery, useMutation } from '@apollo/client'
+import { useQuery, useMutation } from '@apollo/client';
 // import { getMe, deleteBook } from '../utils/API';
 
 import Auth from '../utils/auth';
@@ -72,7 +72,7 @@ const SavedBooks = () => {
         variables: { bookId }
       });
 
-      userData = data.removeBook;
+      // userData = data.removeBook;
 
       // if (!response.ok) {
       //   throw new Error('something went wrong!');
