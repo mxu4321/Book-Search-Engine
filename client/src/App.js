@@ -1,6 +1,7 @@
 // ✅ Create an Apollo Provider to make every request work with the Apollo server.
 // ❄️ import apollo client
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -8,22 +9,37 @@ import SearchBooks from './pages/SearchBooks';
 import SavedBooks from './pages/SavedBooks';
 import Navbar from './components/Navbar';
 
+const httpLink = createHttpLink({
+  uri: '/graphql',
+});
+
+// ❄️ Include the token in the request headers to make every request work with the Apollo server
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('id_token');
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
+
 // ❄️ Create a new Apollo client
 const client = new ApolloClient({
-  // ❄️ Provide the URI to the Apollo Server
-  uri: '/graphql',
-  // ❄️ Include the token in the request headers to make every request work with the Apollo server
-  request: (operation) => {
-    const token = localStorage.getItem('id_token');
-    operation.setContext({
-      headers: {
-        authorization: token ? `Bearer ${token}` : '',
-      },
-    });
-  },
-  // ❄️ Create a new cache for the Apollo client
-  cache: new InMemoryCache(),
-});
+  link: authLink.concat(httpLink),
+    // ❄️ Create a new cache for the Apollo client
+    cache: new InMemoryCache(),
+  });
+ 
+  // request: (operation) => {
+  //   const token = localStorage.getItem('id_token');
+  //   operation.setContext({
+  //     headers: {
+  //       authorization: token ? `Bearer ${token}` : '',
+  //     },
+  //   });
+  // },
+
 
 function App() {
   return (
@@ -44,5 +60,3 @@ function App() {
 }
 
 export default App;
-
-
