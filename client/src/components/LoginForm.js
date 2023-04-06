@@ -1,4 +1,4 @@
-// Replace the addUser() functionality imported from the API file with the ADD_USER mutation functionality.
+// ✅ Replace the addUser() functionality imported from the API file with the ADD_USER mutation functionality.
 
 // see SignupForm.js for comments
 import React, { useState } from 'react';
@@ -41,7 +41,7 @@ const LoginForm = () => {
       });
       console.log(data);
       Auth.login(data.login.token);
-      
+
       // if (!response.ok) {
       //   throw new Error('something went wrong!');
       // }
