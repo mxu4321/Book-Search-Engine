@@ -2,7 +2,8 @@
 // ✅ Instead, use the useQuery() Hook to execute the GET_ME query on load and save it to a variable named userData.
 // ✅ Use the useMutation() Hook to execute the REMOVE_BOOK mutation in the handleDeleteBook() function instead of the deleteBook() function that's imported from API file. (Make sure you keep the removeBookId() function in place!)
 
-import React, { useState, useEffect } from 'react';
+// import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Container,
   Card,
@@ -52,7 +53,7 @@ const SavedBooks = () => {
   // ❄️ useQuery() hook instead of useEffect() hook
     // ⏰ check code below ⏰
   // const { loading, data } = useQuery(GET_ME);
-  const { loading, error, data: { me: userData } = {} } = useQuery(GET_ME);
+  const { loading, data: { me: userData } = {} } = useQuery(GET_ME);
   // console.log(userData);
   const [removeBook] = useMutation(REMOVE_BOOK);
 
