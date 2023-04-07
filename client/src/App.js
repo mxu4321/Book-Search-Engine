@@ -49,15 +49,10 @@ function App() {
     <Router>
       <>
         <Navbar />
-        {/* <Switch>
+        <Routes>
           <Route exact path='/' component={SearchBooks} />
           <Route exact path='/saved' component={SavedBooks} />
           <Route render={() => <h1 className='display-2'>Wrong page!</h1>} />
-        </Switch> */}
-        <Routes>
-          <Route path='/' element={<SearchBooks />} />
-          <Route path='/saved' element={<SavedBooks />} />
-          <Route path='*' element={<h1 className='display-2'>Wrong page!</h1>} />
         </Routes>
       </>
     </Router>

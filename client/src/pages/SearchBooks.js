@@ -83,12 +83,12 @@ const SearchBooks = () => {
     try {
       // ❄️ use the useMutation() Hook to execute the SAVE_BOOK mutation in the handleSaveBook() function instead of the saveBook() function imported from the API file.
       // const response = await saveBook(bookToSave, token);
-      const response = await saveBook({
-        variables: { input: bookToSave },
+     await saveBook({
+        variables: { newBook: { ...bookToSave } },
       });
-      if (!response.ok) {
-        throw new Error("something went wrong!");
-      }
+      // if (!response.ok) {
+      //   throw new Error("something went wrong!");
+      // }
 
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
