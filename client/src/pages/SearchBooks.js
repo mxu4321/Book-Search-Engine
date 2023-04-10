@@ -10,8 +10,11 @@ import React, { useState, useEffect } from "react";
 import { Container, Col, Form, Button, Card, Row } from "react-bootstrap";
 
 import Auth from "../utils/auth";
-// ⤵️ API not needed ⤵️
+
 // import { saveBook, searchGoogleBooks } from '../utils/API';
+// ❄️ removed saveBook & use mutation hook instead
+import { searchGoogleBooks } from '../utils/API';
+
 import { saveBookIds, getSavedBookIds } from "../utils/localStorage";
 
 const SearchBooks = () => {
@@ -29,7 +32,7 @@ const SearchBooks = () => {
     return () => saveBookIds(savedBookIds);
   });
 
-  // ❄️ useMutation is a react hook and must be called in a React function component or a custom React Hook function.
+  // ❄️ useMutation is a react hook and must be called in a React function component or a custom React Hook function
   const [saveBook] = useMutation(SAVE_BOOK);
 
   // create method to search for books and set state on form submit
@@ -42,10 +45,10 @@ const SearchBooks = () => {
 
     try {
       // ❄️ refactored fetch ⤵️
-      // const response = await searchGoogleBooks(searchInput);
-      const response = await fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=${searchInput}`
-      );
+      const response = await searchGoogleBooks(searchInput);
+      // const response = await fetch(
+      //   `https://www.googleapis.com/books/v1/volumes?q=${searchInput}`
+      // );
 
       if (!response.ok) {
         throw new Error("something went wrong!");
@@ -80,11 +83,13 @@ const SearchBooks = () => {
       return false;
     }
 
-    try {
+    console.log(bookToSave);
+
+    // try {
       // ❄️ use the useMutation() Hook to execute the SAVE_BOOK mutation in the handleSaveBook() function instead of the saveBook() function imported from the API file.
       // const response = await saveBook(bookToSave, token);
      await saveBook({
-        variables: { newBook: { ...bookToSave } },
+        variables: { bookData: bookToSave },
       });
       // if (!response.ok) {
       //   throw new Error("something went wrong!");
@@ -92,9 +97,9 @@ const SearchBooks = () => {
 
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
-    } catch (err) {
-      console.error(err);
-    }
+    // } catch (err) {
+    //   console.error(err);
+    // }
   };
 
   return (
@@ -103,7 +108,10 @@ const SearchBooks = () => {
         <Container>
           <h1>Search for Books!</h1>
           <Form onSubmit={handleFormSubmit}>
-            <Form.Row>
+            {/* ❄️ bootstrap 2.7.2: removed. Use Row instead. */}
+            {/* ❄️ https://react-bootstrap.netlify.app/migrating/#formrow */}
+            {/* <Form.Row> */}
+            <Row>
               <Col xs={12} md={8}>
                 <Form.Control
                   name="searchInput"
@@ -119,7 +127,8 @@ const SearchBooks = () => {
                   Submit Search
                 </Button>
               </Col>
-            </Form.Row>
+              </Row>
+            {/* </Form.Row> */}
           </Form>
         </Container>
       </div>

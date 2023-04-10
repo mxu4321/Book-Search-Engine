@@ -4,8 +4,8 @@ import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from '@ap
 import { setContext } from '@apollo/client/link/context';
 
 import React from 'react';
-// import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SearchBooks from './pages/SearchBooks';
 import SavedBooks from './pages/SavedBooks';
 import Navbar from './components/Navbar';
@@ -14,9 +14,11 @@ const httpLink = createHttpLink({
   uri: '/graphql',
 });
 
-// ❄️ Include the token in the request headers to make every request work with the Apollo server
+// Construct request middleware that will attach the JWT token to every request as an `authorization` header
 const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
   const token = localStorage.getItem('id_token');
+  // return the headers to the context so httpLink can read them
   return {
     headers: {
       ...headers,
@@ -25,12 +27,32 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-// ❄️ Create a new Apollo client
 const client = new ApolloClient({
+  // Set up our client to execute the `authLink` middleware prior to making the request to our GraphQL API
   link: authLink.concat(httpLink),
-    // ❄️ Create a new cache for the Apollo client
-    cache: new InMemoryCache(),
-  });
+  cache: new InMemoryCache(),
+});
+// const httpLink = createHttpLink({
+//   uri: '/graphql',
+// });
+
+// // ❄️ Include the token in the request headers to make every request work with the Apollo server
+// const authLink = setContext((_, { headers }) => {
+//   const token = localStorage.getItem('id_token');
+//   return {
+//     headers: {
+//       ...headers,
+//       authorization: token ? `Bearer ${token}` : '',
+//     },
+//   };
+// });
+
+// // ❄️ Create a new Apollo client
+// const client = new ApolloClient({
+//   link: authLink.concat(httpLink),
+//     // ❄️ Create a new cache for the Apollo client
+//     cache: new InMemoryCache(),
+//   });
  
   // request: (operation) => {
   //   const token = localStorage.getItem('id_token');
@@ -49,11 +71,11 @@ function App() {
     <Router>
       <>
         <Navbar />
-        <Routes>
+        <Switch>
           <Route exact path='/' component={SearchBooks} />
           <Route exact path='/saved' component={SavedBooks} />
           <Route render={() => <h1 className='display-2'>Wrong page!</h1>} />
-        </Routes>
+        </Switch>
       </>
     </Router>
     </ApolloProvider>
